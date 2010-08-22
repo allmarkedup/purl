@@ -5,11 +5,13 @@ A jQuery plugin to parse urls and provides easy access to information within the
 
 The parser is based on the Regex URI parser by Steven Levithan - http://blog.stevenlevithan.com/archives/parseuri.
 
-### License
+License
+-------
 
 http://unlicense.org/ - i.e. do what you want with it :-)
 
-### Usage
+Usage
+-----
 
 By default, the parser will use the url of the current page. This can be changed to use a url passed in manually if required (see code example below).
 
@@ -36,7 +38,8 @@ The query string parameters are available through the `.param()` method
 
 The individual path segements are available through the `.segment()` method
 
-### Examples of use
+Examples of use
+---------------
 
 Using the current page's url (for these examples  https://mysite.com/information/about/index.html?itemID=2&user=dave):
 
