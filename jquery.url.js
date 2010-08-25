@@ -127,7 +127,7 @@ jQuery.url = function()
 	     */
 		setMode : function( mode )
 		{
-			strictMode = mode == "strict" ? true : false;
+			options.strictMode = mode == "strict" ? true : false;
 			return this;
 		},
 		
