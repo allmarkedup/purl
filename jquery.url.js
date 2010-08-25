@@ -64,7 +64,7 @@ jQuery.url = function()
      */		
 	var key = function( key )
 	{
-		if ( ! parsed.length )
+		if ( jQuery.isEmptyObject(parsed) )
 		{
 			setUp(); // if the URI has not been parsed yet then do this first...	
 		} 
@@ -90,7 +90,7 @@ jQuery.url = function()
      */		
 	var param = function( item )
 	{
-		if ( ! parsed.length )
+		if ( jQuery.isEmptyObject(parsed) )
 		{
 			setUp(); // if the URI has not been parsed yet then do this first...	
 		}
@@ -154,7 +154,7 @@ jQuery.url = function()
 	     */	
 		segment : function( pos )
 		{
-			if ( ! parsed.length )
+			if ( jQuery.isEmptyObject(parsed) )
 			{
 				setUp(); // if the URI has not been parsed yet then do this first...	
 			} 
