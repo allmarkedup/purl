@@ -60,6 +60,6 @@ Using the current page's url (for these examples  https://mysite.com/information
     
 Using a different url to the current page:
 
-    // get the protocol
+    // set a different URL and return the anchor string
     jQuery.url.setUrl("http://allmarkedup.com/category/javascript/#footer").attr("anchor") // returns 'footer'
 
