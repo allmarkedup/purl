@@ -94,7 +94,14 @@ jQuery.url = function()
 		{
 			setUp(); // if the URI has not been parsed yet then do this first...	
 		}
-		return ( parsed.queryKey[item] === null ) ? null : parsed.queryKey[item];
+		if ( item === undefined )
+		{
+            return parsed.queryKey;
+        }
+        else
+        {
+            return ( parsed.queryKey[item] === null ) ? null : parsed.queryKey[item];
+        }
 	};
 
     /**
