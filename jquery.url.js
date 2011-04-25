@@ -21,7 +21,7 @@ jQuery.url = function()
 		
 		q: {
 			name: "queryKey",
-			parser: /(?:^|&;)([^&=;]*)=?([^&;]*)/g
+			parser: /(?:^|&|;)([^&=;]*)=?([^&;]*)/g
 		},
 		
 		parser: {
