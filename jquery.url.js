@@ -10,47 +10,68 @@
         link    : 'href'
     },
     
-	key = ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"], // keys available to query 
+	key = ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","fragment"], // keys available to query
+	
+	aliases = { "anchor" : "fragment" }, // aliases for backwards compatability
 
 	parser = {
 		strict  : /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,  //less intuitive, more accurate to the specs
 		loose   :  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/ // more intuitive, fails on relative paths and deviates from specs
 	},
 	
-	qs_parser = /(?:^|&|;)([^&=;]*)=?([^&;]*)/g; // supports both ampersand and semicolon-delimted query string key/value pairs
-		
+	querystring_parser = /(?:^|&|;)([^&=;]*)=?([^&;]*)/g, // supports both ampersand and semicolon-delimted query string key/value pairs
+	
+	fragment_parser = /(?:^|&|;)([^&=;]*)=?([^&;]*)/g; // supports both ampersand and semicolon-delimted fragment key/value pairs
+	
 	function parseUri( url, strictMode )
 	{
-		str = decodeURI( url );
+		var str = decodeURI( url ),
+		    res   = parser[ strictMode || false ? "strict" : "loose" ].exec( str ),
+		    uri = { attr : {}, param : {}, seg : {} },
+		    i   = 14;
 		
-		strictMode = strictMode || false;
-		
-		var m = parser[ strictMode ? "strict" : "loose" ].exec( str );
-		var uri = {};
-		var i = 14;
-
 		while ( i-- )
 		{
-			uri[ key[i] ] = m[i] || "";
+			uri.attr[ key[i] ] = res[i] || "";
 		}
-
-		uri['params'] = {};
 		
-		uri['query'].replace( qs_parser, function ( $0, $1, $2 ){
+		// build query and fragment parameters
+		
+		uri.param['query'] = {};
+		uri.param['fragment'] = {};
+		
+		uri.attr['query'].replace( querystring_parser, function ( $0, $1, $2 ){
 			if ($1)
 			{
-				uri['params'][$1] = $2;
+				uri.param['query'][$1] = $2;
 			}
 		});
-
+		
+		uri.attr['fragment'].replace( fragment_parser, function ( $0, $1, $2 ){
+			if ($1)
+			{
+				uri.param['fragment'][$1] = $2;
+			}
+		});
+				
+		// split path and fragement into segments
+		
+        uri.seg['path'] = uri.attr.path.replace(/^\/+|\/+$/g,'').split('/');
+        
+        uri.seg['fragment'] = uri.attr.fragment.replace(/^\/+|\/+$/g,'').split('/');
+        
+        // compile a 'base' domain attribute
+        
+        uri.attr['base'] = uri.attr.host ? uri.attr.protocol+"://"+uri.attr.host + (uri.attr.port ? ":"+uri.attr.port : '') : '';
+        
 		return uri;
 	};
 	
 	function getAttrName( elm )
 	{
-		var tg = elm.tagName;
-		if ( tg !== undefined ) return tag2attr[tg.toLowerCase()];
-		return tg;
+		var tn = elm.tagName;
+		if ( tn !== undefined ) return tag2attr[tn.toLowerCase()];
+		return tn;
 	}
 	
 	$.fn.url = function( strictMode )
@@ -69,20 +90,57 @@
 	{
 	    var url     = '',
 	        strict  = false;
-	        
+
 	    if ( typeof opts === 'string' )
 	    {
 	        url = opts;
 	    }
 	    else
 	    {
+	        opts = opts || {};
 	        strict = opts.strict || strict;
-	        url = opts.url === undefined ? window.location.toString() : opts.url;
+            url = opts.url === undefined ? window.location.toString() : opts.url;
 	    }
+	    	            
+        return {
+            
+            data : parseUri(url, strict),
+            
+            // get various attributes from the URI
+            attr : function( attr )
+            {
+                attr = aliases[attr] || attr;
+                return this.data.attr[attr];
+            },
+            
+            // return query string parameters
+            param : function( attr )
+            {
+                return attr ? this.data.param.query[attr] : this.data.param.query;
+            },
+            
+            // return fragment parameters
+            fparam : function( attr )
+            {
+                return attr ? this.data.param.fragment[attr] : this.data.param.fragment;
+            },
+            
+            // return path segments
+            segment : function( seg )
+            {
+                seg = seg < 0 ? this.data.seg.path.length + seg : seg - 1; // negative segments count from the end
+                return seg === undefined ? this.data.seg.path : this.data.seg.path[seg];
+            },
+            
+            // return fragment segments
+            fsegment : function( seg )
+            {
+                seg = seg < 0 ? this.data.seg.path.length + seg : seg - 1; // negative segments count from the end
+                return seg === undefined ? this.data.seg.fragment : this.data.seg.fragment[seg];
+            }
+            
+        };
         
-        console.log(url)
-        
-        // TBC...
 	};
 	
 })(jQuery);
