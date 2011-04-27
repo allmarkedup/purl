@@ -1,3 +1,7 @@
+// JQuery URL Parser plugin - https://github.com/allmarkedup/jQuery-URL-Parser
+// Written by Mark Perkins, mark@allmarkedup.com
+// License: http://unlicense.org/ (i.e. do what you want with it!)
+
 ;(function($, undefined) {
     
     var tag2attr = {
