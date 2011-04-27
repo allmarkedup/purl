@@ -5,7 +5,7 @@ A jQuery plugin to parse urls and provide easy access to their attributes (such 
 
 The core parser functionality is based on the [Regex URI parser by Steven Levithan](http://blog.stevenlevithan.com/archives/parseuri).
 
-*Please note that version 2 is not backwards compatible with version 1 of this plugin. v1 is tagged and still available should you need it for some reason.*
+*Please note that version 2 is **not** backwards compatible with version 1.x of this plugin. v1.1 is still [available for download](https://github.com/allmarkedup/jQuery-URL-Parser/zipball/v1.1) should you need it for some reason.*
 
 This plugin requires jQuery to work. Tested on 1.4 and above but will probably work on older versions, too.
 
