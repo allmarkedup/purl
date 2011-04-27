@@ -110,19 +110,19 @@
             attr : function( attr )
             {
                 attr = aliases[attr] || attr;
-                return this.data.attr[attr];
+                return attr !== undefined ? this.data.attr[attr] : this.data.attr;
             },
             
             // return query string parameters
-            param : function( attr )
+            param : function( param )
             {
-                return attr ? this.data.param.query[attr] : this.data.param.query;
+                return param !== undefined ? this.data.param.query[param] : this.data.param.query;
             },
             
             // return fragment parameters
-            fparam : function( attr )
+            fparam : function( param )
             {
-                return attr ? this.data.param.fragment[attr] : this.data.param.fragment;
+                return param !== undefined ? this.data.param.fragment[param] : this.data.param.fragment;
             },
             
             // return path segments
