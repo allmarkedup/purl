@@ -1,4 +1,4 @@
-;(function($) {
+;(function($, undefined) {
     
     var tag2attr = {
         a       : 'href',
