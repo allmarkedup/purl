@@ -128,15 +128,29 @@
             // return path segments
             segment : function( seg )
             {
-                seg = seg < 0 ? this.data.seg.path.length + seg : seg - 1; // negative segments count from the end
-                return seg === undefined ? this.data.seg.path : this.data.seg.path[seg];
+                if ( seg === undefined )
+                {
+                    return this.data.seg.path;                    
+                }
+                else
+                {
+                    seg = seg < 0 ? this.data.seg.path.length + seg : seg - 1; // negative segments count from the end
+                    return this.data.seg.path[seg];                    
+                }
             },
             
             // return fragment segments
             fsegment : function( seg )
             {
-                seg = seg < 0 ? this.data.seg.path.length + seg : seg - 1; // negative segments count from the end
-                return seg === undefined ? this.data.seg.fragment : this.data.seg.fragment[seg];
+                if ( seg === undefined )
+                {
+                    return this.data.seg.fragment;                    
+                }
+                else
+                {
+                    seg = seg < 0 ? this.data.seg.fragment.length + seg : seg - 1; // negative segments count from the end
+                    return this.data.seg.fragment[seg];                    
+                }
             }
             
         };
