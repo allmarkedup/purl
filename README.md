@@ -102,8 +102,8 @@ $.url('http://test.com/#sky=blue&grass=green').fparam('grass'); // returns 'gree
 $.url('http://test.com/#/about/us/').fsegment(1); // returns 'about'
 ```
 
-Strict and loose modes
-----------------------
+Enabling strict mode
+--------------------
 
 Internally this plugin uses Steven Levithan's excellent Regex URI parser, which has two modes - loose and strict. This plugin uses the loose mode by default (i.e. strict mode set to `false`), which deviates slightly from the specs but produces more intuitive results. If for some reason you prefer to use the strict parser and so be fully spec-compatible, then you can enable this when calling the plugin as follows:
 
