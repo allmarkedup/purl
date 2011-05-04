@@ -101,3 +101,23 @@ $.url('http://test.com/#sky=blue&grass=green').fparam('grass'); // returns 'gree
 
 $.url('http://test.com/#/about/us/').fsegment(1); // returns 'about'
 ```
+
+Strict and loose modes
+----------------------
+
+Internally this plugin uses Steven Levithan's excellent Regex URI parser, which has two modes - loose and strict. This plugin uses the loose mode by default (i.e. strict mode set to `false`), which deviates slightly from the specs but produces more intuitive results. If for some reason you prefer to use the strict parser and so be fully spec-compatible, then you can enable this when calling the plugin as follows:
+
+``` javascript
+var url = $.url(true); // parse the current page URL in strict mode
+var url = $.url('http://allmarkedup.com',true); // pass in a URI as a string and parse that in strict mode
+var url = $('#myElement').url(true); // extract the URL from the selected element and parse that in strict mode
+```
+
+A note on improperly encoded URLs
+---------------------------------
+
+If you attempt to use this plugin to parse a URL that has an invalid character encoding in it, it will throw a `URIError` Exception. This will happen if the URL has a percentage sign followed by either a non-numeric character or a numeric value of greater than 80 (i.e. 128 in decimal).
+
+If there is a chance you may end up parsing a badly encoded URL you should probably wrap your calls to this plugin in a try/catch block to prevent this causing unforseen problems.
+
+Thanks to [steve78b](https://github.com/steve78b) for pointing this out.
