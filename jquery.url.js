@@ -87,28 +87,23 @@
 	        url = $(this).attr( getAttrName(this[0]) ) || '';
 	    }
 	    
-        return $.url({ url : url, strict : strictMode });
+        return $.url( url, strictMode );
 	};
 	
-	$.url = function( opts )
+	$.url = function( url, strictMode )
 	{
-	    var url     = '',
-	        strict  = false;
-
-	    if ( typeof opts === 'string' )
-	    {
-	        url = opts;
-	    }
-	    else
-	    {
-	        opts = opts || {};
-	        strict = opts.strict || strict;
-            url = opts.url === undefined ? window.location.toString() : opts.url;
-	    }
-	    	            
+	    if ( arguments.length === 1 && url === true )
+        {
+            strictMode = true;
+            url = undefined;
+        }
+        
+        strictMode = strictMode || false;
+        url = url || window.location.toString();
+        	    	            
         return {
             
-            data : parseUri(url, strict),
+            data : parseUri(url, strictMode),
             
             // get various attributes from the URI
             attr : function( attr )
