@@ -11,6 +11,8 @@ This plugin requires jQuery to work. Tested on 1.4 and above but will probably w
 
 **License:** http://unlicense.org/ - i.e. do what you want with it :-)
 
+**PLAIN JS VERSION**: I've now [created a branch of this that doesn't require jQuery](https://github.com/allmarkedup/jQuery-URL-Parser/tree/no-jquery). It has all the functionality of the jQuery version apart from the ability to retrieve and work with the URL of an specific element specified by a CSS selector. Grab it here: ['Plain JS' URL parser](https://github.com/allmarkedup/jQuery-URL-Parser/tree/no-jquery)
+
 Specifying the URL to parse
 ---------------------------
 
