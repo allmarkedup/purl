@@ -1,8 +1,8 @@
-// JQuery URL Parser plugin - https://github.com/allmarkedup/jQuery-URL-Parser
+// jQuery URL Parser plugin (No jQuery version!) - https://github.com/allmarkedup/jQuery-URL-Parser/tree/no-jquery
 // Written by Mark Perkins, mark@allmarkedup.com
 // License: http://unlicense.org/ (i.e. do what you want with it!)
 
-;(function($, undefined) {
+var purl = (function(undefined) {
     
     var tag2attr = {
         a       : 'href',
@@ -78,20 +78,7 @@
 		return tn;
 	}
 	
-	$.fn.url = function( strictMode )
-	{
-	    var url = '';
-	    
-	    if ( this.length )
-	    {
-	        url = $(this).attr( getAttrName(this[0]) ) || '';
-	    }
-	    
-        return $.url( url, strictMode );
-	};
-	
-	$.url = function( url, strictMode )
-	{
+	return (function( url, strictMode ) {
 	    if ( arguments.length === 1 && url === true )
         {
             strictMode = true;
@@ -154,6 +141,6 @@
             
         };
         
-	};
+	});
 	
-})(jQuery);
+})();
