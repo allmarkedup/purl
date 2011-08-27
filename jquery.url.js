@@ -105,11 +105,17 @@
             
             data : parseUri(url, strictMode),
             
-            // get various attributes from the URI
-            attr : function( attr )
+            // get or set various attributes from the URI
+            attr : function( attr, value )
             {
                 attr = aliases[attr] || attr;
-                return attr !== undefined ? this.data.attr[attr] : this.data.attr;
+                if (value !== undefined) {
+                  this.data.attr[attr] = value
+                  return this
+                }
+                else {
+                  return attr !== undefined ? this.data.attr[attr] : this.data.attr;
+                }
             },
             
             // return query string parameters
@@ -150,8 +156,19 @@
                     seg = seg < 0 ? this.data.seg.fragment.length + seg : seg - 1; // negative segments count from the end
                     return this.data.seg.fragment[seg];                    
                 }
+            },
+
+            toString: function()
+            {
+                return this.data.attr['protocol'] + 
+                  "://" + 
+                  this.data.attr['host'] + 
+                  (this.data.attr['port'] ? ":"+this.data.attr['port'] : "") +
+                  (this.data.attr['path'] ? this.data.attr['path'] : "") +
+                  (this.data.attr['query'] ? "?"+this.data.attr['query'] : "") +
+                  (this.data.attr['fragment'] ? "#"+this.data.attr['fragment'] : "")
             }
-            
+
         };
         
 	};
