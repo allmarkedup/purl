@@ -9,7 +9,7 @@ The core parser functionality is based on the [Regex URI parser by Steven Levith
 
 This plugin requires jQuery to work. Tested on 1.4 and above but will probably work on older versions, too.
 
-**License:** http://unlicense.org/ - i.e. do what you want with it :-)
+**License:** Available for use under a MIT-style license. If you need a different license for any reason please just let me know.
 
 **PLAIN JS VERSION**: I've now [created a branch of this that doesn't require jQuery](https://github.com/allmarkedup/jQuery-URL-Parser/tree/no-jquery). It has all the functionality of the jQuery version apart from the ability to retrieve and work with the URL of an specific element specified by a CSS selector. Grab it here: ['Plain JS' URL parser](https://github.com/allmarkedup/jQuery-URL-Parser/tree/no-jquery)
 
