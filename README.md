@@ -7,7 +7,7 @@ The core parser functionality is based on the [Regex URI parser by Steven Levith
 
 This has all the functionality of the jQuery version **apart from** the ability to retrieve and work with the URL of an specific element specified by a CSS selector. If you need that then use the jQuery version!
 
-**License:** http://unlicense.org/ - i.e. do what you want with it :-)
+**License:** Available for use under a MIT-style license. If you need a different license for any reason please just let me know.
 
 Specifying the URL to parse
 ---------------------------
