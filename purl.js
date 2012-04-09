@@ -1,6 +1,9 @@
-// jQuery URL Parser plugin (No jQuery version!) - https://github.com/allmarkedup/jQuery-URL-Parser/tree/no-jquery
-// Written by Mark Perkins, mark@allmarkedup.com
-// License: http://unlicense.org/ (i.e. do what you want with it!)
+/*
+ * JQuery URL Parser plugin (The No-jQuery version!)
+ * Developed and maintanined by Mark Perkins, mark@allmarkedup.com
+ * Source repository: https://github.com/allmarkedup/jQuery-URL-Parser
+ * Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
+ */ 
 
 var purl = (function(undefined) {
     
