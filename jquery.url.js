@@ -5,8 +5,15 @@
  * Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
  */ 
 
-;(function($, undefined) {
-    
+;(function(factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD available; use anonymous module
+        define(['jquery'], factory);
+    } else {
+        // No AMD available; mutate global vars
+        factory(jQuery);
+    }
+})(function($, undefined) {
     var tag2attr = {
         a       : 'href',
         img     : 'src',
@@ -159,4 +166,5 @@
         
 	};
 	
-})(jQuery);
+});
+
