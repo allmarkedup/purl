@@ -50,7 +50,18 @@
 		uri.attr['query'].replace( querystring_parser, function ( $0, $1, $2 ){
 			if ($1)
 			{
-				uri.param['query'][$1] = $2;
+				if (!uri.param['query'][$1])
+				{
+					uri.param['query'][$1] = $2;
+				}
+				else if (jQuery.isArray(uri.param['query'][$1]))
+				{
+					uri.param['query'][$1].push($2);
+				}
+				else
+				{
+					uri.param['query'][$1] = [uri.param['query'][$1], $2];
+				}
 			}
 		});
 		
