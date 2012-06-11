@@ -90,6 +90,16 @@
 	        url = $(this).attr( getAttrName(this[0]) ) || '';
 	    }
 	    
+	    if (querystring_parser_custom)
+    	    {
+	    	querystring_parser = querystring_parser_custom;
+    	    }
+	    
+	    if (fragment_parser_custom)
+	    {
+	    	fragment_parser = fragment_parser_custom;
+	    }
+	    
         return $.url( url, strictMode );
 	};
 	
