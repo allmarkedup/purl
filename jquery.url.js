@@ -32,7 +32,7 @@
 	
 	function parseUri( url, strictMode )
 	{
-		var str = decodeURI( url ),
+		var str = decodeURI( unescape(url) ),
 		    res   = parser[ strictMode || false ? "strict" : "loose" ].exec( str ),
 		    uri = { attr : {}, param : {}, seg : {} },
 		    i   = 14;
