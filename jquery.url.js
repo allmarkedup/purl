@@ -69,7 +69,7 @@
         
         // compile a 'base' domain attribute
         
-        uri.attr['base'] = uri.attr.host ? uri.attr.protocol+"://"+uri.attr.host + (uri.attr.port ? ":"+uri.attr.port : '') : '';
+        uri.attr['base'] = uri.attr.host ? (uri.attr.protocol ?  uri.attr.protocol+"://"+uri.attr.host : uri.attr.host) + (uri.attr.port ? ":"+uri.attr.port : '') : '';
         
 		return uri;
 	};
