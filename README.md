@@ -115,6 +115,15 @@ var url = $.url('http://allmarkedup.com',true); // pass in a URI as a string and
 var url = $('#myElement').url(true); // extract the URL from the selected element and parse that in strict mode
 ```
 
+Modifying URLS
+--------------------
+You can modify the attributes of a URL and use the toString() method to get the resulting URL:
+``` javascript
+var url = $.url('http://allmarkedup.com');
+url.attr('fragment','x=y');
+url.toString(); // returns http://allmarkedup.com#x=y
+```
+
 A note on improperly encoded URLs
 ---------------------------------
 
