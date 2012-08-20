@@ -5,7 +5,7 @@
  * Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
  */ 
 
-;(function(factory) {
+(function(factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD available; use anonymous module
         define(['jquery'], factory);
