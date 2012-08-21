@@ -8,14 +8,22 @@
 ;(function(factory) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD available; use anonymous module
-		define(['jquery'], factory);
+		if ( typeof jQuery !== 'undefined' ) {
+			define(['jquery'], factory);	
+		} else {
+			define([], factory);
+		}
 	} else {
 		// No AMD available; mutate global vars
-		factory(jQuery);
+		if ( typeof jQuery !== 'undefined' ) {
+			factory(jQuery);
+		} else {
+			factory();
+		}
 	}
 })(function($, undefined) {
 	
-		var tag2attr = {
+	var tag2attr = {
 			a       : 'href',
 			img     : 'src',
 			form    : 'action',
@@ -75,19 +83,11 @@
 	
 	function getAttrName( elm ) {
 		var tn = elm.tagName;
-		if ( tn !== undefined ) return tag2attr[tn.toLowerCase()];
+		if ( typeof tn !== 'undefined' ) return tag2attr[tn.toLowerCase()];
 		return tn;
 	}
-	
-	$.fn.url = function( strictMode ) {
-		var url = '';
-		if ( this.length ) {
-			url = $(this).attr( getAttrName(this[0]) ) || '';
-		}    
-		return $.url( url, strictMode );
-	};
-	
-	$.url = function( url, strictMode ) {
+		
+	function purl( url, strictMode ) {
 		if ( arguments.length === 1 && url === true ) {
 			strictMode = true;
 			url = undefined;
@@ -102,22 +102,22 @@
 			// get various attributes from the URI
 			attr : function( attr ) {
 				attr = aliases[attr] || attr;
-				return attr !== undefined ? this.data.attr[attr] : this.data.attr;
+				return typeof attr !== 'undefined' ? this.data.attr[attr] : this.data.attr;
 			},
 			
 			// return query string parameters
 			param : function( param ) {
-				return param !== undefined ? this.data.param.query[param] : this.data.param.query;
+				return typeof param !== 'undefined' ? this.data.param.query[param] : this.data.param.query;
 			},
 			
 			// return fragment parameters
 			fparam : function( param ) {
-				return param !== undefined ? this.data.param.fragment[param] : this.data.param.fragment;
+				return typeof param !== 'undefined' ? this.data.param.fragment[param] : this.data.param.fragment;
 			},
 			
 			// return path segments
 			segment : function( seg ) {
-				if ( seg === undefined ) {
+				if ( typeof seg === 'undefined' ) {
 					return this.data.seg.path;
 				} else {
 					seg = seg < 0 ? this.data.seg.path.length + seg : seg - 1; // negative segments count from the end
@@ -127,7 +127,7 @@
 			
 			// return fragment segments
 			fsegment : function( seg ) {
-				if ( seg === undefined ) {
+				if ( typeof seg === 'undefined' ) {
 					return this.data.seg.fragment;                    
 				} else {
 					seg = seg < 0 ? this.data.seg.fragment.length + seg : seg - 1; // negative segments count from the end
@@ -139,5 +139,21 @@
 	
 	};
 	
+	if ( typeof $ !== 'undefined' ) {
+		
+		$.fn.url = function( strictMode ) {
+			var url = '';
+			if ( this.length ) {
+				url = $(this).attr( getAttrName(this[0]) ) || '';
+			}    
+			return purl( url, strictMode );
+		};
+		
+		$.url = purl;
+		
+	} else {
+		window.purl = purl;
+	}
+
 });
 
