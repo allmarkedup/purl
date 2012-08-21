@@ -1,17 +1,22 @@
-jQuery URL Parser v2.0
+(jQuery) URL Parser v2.1
 ======================
 
-A jQuery plugin to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more.
+A little utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more.
 
 The core parser functionality is based on the [Regex URI parser by Steven Levithan](http://blog.stevenlevithan.com/archives/parseuri).
 
-*Please note that version 2 is **not** backwards compatible with version 1.x of this plugin. v1.1 is still [available for download](https://github.com/allmarkedup/jQuery-URL-Parser/zipball/v1.1) should you need it for some reason.*
+Both the jQuery and non-jQuery of this utility provide AMD compatability.
 
-This plugin requires jQuery to work. Tested on 1.4 and above but will probably work on older versions, too.
+**Note this used to have a jQuery dependency - this is now optional. See below for details**
 
 **License:** Available for use under a MIT-style license. If you need a different license for any reason please just let me know.
 
-**PLAIN JS VERSION**: I've now [created a branch of this that doesn't require jQuery](https://github.com/allmarkedup/jQuery-URL-Parser/tree/no-jquery). It has all the functionality of the jQuery version apart from the ability to retrieve and work with the URL of an specific element specified by a CSS selector. Grab it here: ['Plain JS' URL parser](https://github.com/allmarkedup/jQuery-URL-Parser/tree/no-jquery)
+To jQuery or *not* to jQuery, that is the question...
+----------------------------------------------------
+
+This utility can be used in two ways - with jQuery or without. There is just one file (purl.js) for both versions - if jQuery is included on the page before it then it will provide the 'jQuery-style' interface (see examples below), otherwise it will be accessible via the global `purl` variable.
+
+The jQuery version has an additional feature that lets it extract the URL from a jQuery element object, where appropriate.
 
 Specifying the URL to parse
 ---------------------------
@@ -19,9 +24,14 @@ Specifying the URL to parse
 There are a few different ways to choose what URL to parse:
 
 ``` javascript
+/*---- jQuery version -----*/
 var url = $.url(); // parse the current page URL
 var url = $.url('http://allmarkedup.com'); // pass in a URI as a string and parse that 
 var url = $('#myElement').url(); // extract the URL from the selected element and parse that - will work on any element with a `src`, `href` or `action` attribute.
+
+/*---- plain JS version -----*/
+var url = purl(); // parse the current page URL
+var url = purl('http://allmarkedup.com'); // pass in a URI as a string and parse that 
 ```
 
 URL attributes
@@ -30,7 +40,8 @@ URL attributes
 The `.attr()` method is used to return information on various parts of the URL. For example:
 
 ``` javascript
-var url = $.url('http://allmarkedup.com/folder/dir/index.html?item=value');
+var url = $.url('http://allmarkedup.com/folder/dir/index.html?item=value'); // jQuery version
+var url = purl('http://allmarkedup.com/folder/dir/index.html?item=value'); // plain JS version
 url.attr('protocol'); // returns 'http'
 url.attr('path'); // returns '/folder/dir/index.html'
 ```
@@ -60,13 +71,21 @@ The `.param()` method is used to return the values of querystring parameters.
 Pass in a string to access that parameter's value:
 
 ``` javascript
+/*---- jQuery version -----*/
 $.url('http://allmarkedup.com?sky=blue&grass=green').param('sky'); // returns 'blue'
+
+/*---- plain JS version -----*/
+purl('http://allmarkedup.com?sky=blue&grass=green').param('sky'); // returns 'blue'
 ```
 
 If no argument is passed in it will return an object literal containing a key:value map of all the querystring parameters.
 
 ``` javascript
+/*---- jQuery version -----*/
 $.url('http://allmarkedup.com?sky=blue&grass=green').param(); // returns { 'sky':'blue', 'grass':'green' }
+
+/*---- plain JS version -----*/
+purl('http://allmarkedup.com?sky=blue&grass=green').param(); // returns { 'sky':'blue', 'grass':'green' }
 ```
 
 Note that the `.param()` method will work on both ampersand-split and semicolon-split querystrings.
@@ -81,14 +100,16 @@ Pass in an integer value to get the value of that segment - note however that th
 You can also pass in negative values, in which case it will count back from the end of the path rather than forwards from the start.
 
 ``` javascript
-var url = $.url('http://allmarkedup.com/folder/dir/example/index.html');
+var url = $.url('http://allmarkedup.com/folder/dir/example/index.html'); // jQuery version
+var url = purl('http://allmarkedup.com/folder/dir/example/index.html'); // plain JS version
 url.segment(1); // returns 'folder'
 url.segment(-2); // returns 'example'
 ```
 If no argument is passed in it will return an array of all the segments (which will be zero-indexed!).
 
 ``` javascript
-$.url('http://allmarkedup.com/folder/dir/example/index.html').segment(); // returns ['folder','dir','example','index.html']
+$.url('http://allmarkedup.com/folder/dir/example/index.html').segment(); // jQuery version - returns ['folder','dir','example','index.html']
+purl('http://allmarkedup.com/folder/dir/example/index.html').segment(); // plain JS version - returns ['folder','dir','example','index.html']
 ```
 
 Fragment parameters and/or segments
@@ -99,9 +120,13 @@ Some sites and apps also use the hash fragment to store querystring-style key va
 There are two methods available for extracting information from fragments of these types - `.fparam()` and `.fsegment()`, both of which behave indentically to their `.param()` and `.segment()` counterparts but act on the fragment rather than the main URL.
 
 ``` javascript
+/*---- jQuery version -----*/
 $.url('http://test.com/#sky=blue&grass=green').fparam('grass'); // returns 'green'
-
 $.url('http://test.com/#/about/us/').fsegment(1); // returns 'about'
+
+/*---- plain JS version -----*/
+purl('http://test.com/#sky=blue&grass=green').fparam('grass'); // returns 'green'
+purl('http://test.com/#/about/us/').fsegment(1); // returns 'about'
 ```
 
 Enabling strict mode
@@ -110,10 +135,16 @@ Enabling strict mode
 Internally this plugin uses Steven Levithan's excellent Regex URI parser, which has two modes - loose and strict. This plugin uses the loose mode by default (i.e. strict mode set to `false`), which deviates slightly from the specs but produces more intuitive results. If for some reason you prefer to use the strict parser and so be fully spec-compatible, then you can enable this when calling the plugin as follows:
 
 ``` javascript
+/*---- jQuery version -----*/
 var url = $.url(true); // parse the current page URL in strict mode
 var url = $.url('http://allmarkedup.com',true); // pass in a URI as a string and parse that in strict mode
 var url = $('#myElement').url(true); // extract the URL from the selected element and parse that in strict mode
+
+/*---- plain JS version -----*/
+var url = purl(true); // parse the current page URL in strict mode
+var url = purl('http://allmarkedup.com',true); // pass in a URI as a string and parse that in strict mode
 ```
+
 
 A note on improperly encoded URLs
 ---------------------------------
@@ -123,3 +154,8 @@ If you attempt to use this plugin to parse a URL that has an invalid character e
 If there is a chance you may end up parsing a badly encoded URL you should probably wrap your calls to this plugin in a try/catch block to prevent this causing unforseen problems.
 
 Thanks to [steve78b](https://github.com/steve78b) for pointing this out.
+
+Older versions and compatability
+---------------------------------
+
+Please note that v2.x is **not** backwards compatible with v1.x of this plugin. v1.1 is still [available for download](https://github.com/allmarkedup/jQuery-URL-Parser/zipball/v1.1) should you need it for some reason.
