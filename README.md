@@ -129,10 +129,10 @@ purl('http://test.com/#sky=blue&grass=green').fparam('grass'); // returns 'green
 purl('http://test.com/#/about/us/').fsegment(1); // returns 'about'
 ```
 
-Enabling strict mode
+Strict mode and relative URLs
 --------------------
 
-Internally this plugin uses Steven Levithan's excellent Regex URI parser, which has two modes - loose and strict. This plugin uses the loose mode by default (i.e. strict mode set to `false`), which deviates slightly from the specs but produces more intuitive results. If for some reason you prefer to use the strict parser and so be fully spec-compatible, then you can enable this when calling the plugin as follows:
+Internally this plugin uses Steven Levithan's excellent Regex URI parser, which has two modes - loose and strict. This plugin uses the loose mode by default (i.e. strict mode set to `false`), which deviates slightly from the specs but can produce more intuitive results in some situations. However, loose mode will not correctly parse relative URLs, so you can optionally enable strict mode when calling the plugin as follows:
 
 ``` javascript
 /*---- jQuery version -----*/
