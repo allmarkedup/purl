@@ -1,5 +1,5 @@
 /*
- * JQuery URL Parser plugin, v2.1
+ * JQuery URL Parser plugin, v2.2
  * Developed and maintanined by Mark Perkins, mark@allmarkedup.com
  * Source repository: https://github.com/allmarkedup/jQuery-URL-Parser
  * Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
@@ -41,10 +41,10 @@
 			strict : /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,  //less intuitive, more accurate to the specs
 			loose :  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/ // more intuitive, fails on relative paths and deviates from specs
 		},
-	
-		querystring_parser = /(?:^|&|;)([^&=;]*)=?([^&;]*)/g, // supports both ampersand and semicolon-delimted query string key/value pairs
-	
-		fragment_parser = /(?:^|&|;)([^&=;]*)=?([^&;]*)/g; // supports both ampersand and semicolon-delimted fragment key/value pairs
+		
+		toString = Object.prototype.toString,
+		
+		isint = /^[0-9]+$/;
 	
 	function parseUri( url, strictMode ) {
 		var str = decodeURI( url ),
@@ -57,19 +57,8 @@
 		}
 		
 		// build query and fragment parameters		
-		uri.param['query'] = {};
-		uri.param['fragment'] = {};
-		uri.attr['query'].replace( querystring_parser, function ( $0, $1, $2 ){
-			if ($1) {
-				uri.param['query'][$1] = $2;
-			}
-		});
-		
-		uri.attr['fragment'].replace( fragment_parser, function ( $0, $1, $2 ){
-			if ($1) {
-				uri.param['fragment'][$1] = $2;
-			}
-		});
+		uri.param['query'] = parseString(uri.attr['query']);
+		uri.param['fragment'] = parseString(uri.attr['fragment']);
 		
 		// split path and fragement into segments		
 		uri.seg['path'] = uri.attr.path.replace(/^\/+|\/+$/g,'').split('/');     
@@ -85,6 +74,113 @@
 		var tn = elm.tagName;
 		if ( typeof tn !== 'undefined' ) return tag2attr[tn.toLowerCase()];
 		return tn;
+	}
+	
+	function promote(parent, key) {
+		if (parent[key].length == 0) return parent[key] = {};
+		var t = {};
+		for (var i in parent[key]) t[i] = parent[key][i];
+		parent[key] = t;
+		return t;
+	}
+
+	function parse(parts, parent, key, val) {
+		var part = parts.shift();
+		// end
+		if (!part) {
+			if (Array.isArray(parent[key])) {
+				parent[key].push(val);
+			} else if ('object' == typeof parent[key]) {
+				parent[key] = val;
+			} else if ('undefined' == typeof parent[key]) {
+				parent[key] = val;
+			} else {
+				parent[key] = [parent[key], val];
+			}
+			// array
+		} else {
+			var obj = parent[key] = parent[key] || [];
+			if (']' == part) {
+				if (Array.isArray(obj)) {
+					if ('' != val) obj.push(val);
+				} else if ('object' == typeof obj) {
+					obj[Object.keys(obj).length] = val;
+				} else {
+					obj = parent[key] = [parent[key], val];
+				}
+				// prop
+			} else if (~part.indexOf(']')) {
+				part = part.substr(0, part.length - 1);
+				if (!isint.test(part) && Array.isArray(obj)) obj = promote(parent, key);
+				parse(parts, obj, part, val);
+				// key
+			} else {
+				if (!isint.test(part) && Array.isArray(obj)) obj = promote(parent, key);
+				parse(parts, obj, part, val);
+			}
+		}
+	}
+
+	function merge(parent, key, val) {
+		if (~key.indexOf(']')) {
+			var parts = key.split('['),
+			len = parts.length,
+			last = len - 1;
+			parse(parts, parent, 'base', val);
+			// optimize
+		} else {
+			if (!isint.test(key) && Array.isArray(parent.base)) {
+				var t = {};
+				for (var k in parent.base) t[k] = parent.base[k];
+				parent.base = t;
+			}
+			set(parent.base, key, val);
+		}
+		return parent;
+	}
+
+	function parseString(str) {
+		return String(str)
+			.split(/&|;/)
+			.reduce(function(ret, pair) {
+			try{
+				pair = decodeURIComponent(pair.replace(/\+/g, ' '));
+			} catch(e) {
+				// ignore
+			}
+
+			var eql = pair.indexOf('='),
+				brace = lastBraceInKey(pair),
+				key = pair.substr(0, brace || eql),
+				val = pair.substr(brace || eql, pair.length),
+				val = val.substr(val.indexOf('=') + 1, val.length);
+
+			if ('' == key) key = pair, val = '';
+
+			return merge(ret, key, val);
+		}, { base: {} }).base;
+	}
+
+	function set(obj, key, val) {
+		var v = obj[key];
+		if (undefined === v) {
+			obj[key] = val;
+		} else if (Array.isArray(v)) {
+			v.push(val);
+		} else {
+			obj[key] = [v, val];
+		}
+	}
+
+	function lastBraceInKey(str) {
+		var len = str.length,
+			 brace, c;
+		for (var i = 0; i < len; ++i) {
+			c = str[i];
+			if (']' == c) brace = false;
+			if ('[' == c) brace = true;
+			if ('=' == c && !brace) return i;
+		}
 	}
 		
 	function purl( url, strictMode ) {

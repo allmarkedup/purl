@@ -1,11 +1,9 @@
-(jQuery) URL Parser v2.1
+(jQuery) URL Parser v2.2
 ======================
 
-A little utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more.
+An AMD compatible utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more.
 
-The core parser functionality is based on the [Regex URI parser by Steven Levithan](http://blog.stevenlevithan.com/archives/parseuri).
-
-Both the jQuery and non-jQuery of this utility provide AMD compatability.
+The core parser functionality is based on the [Regex URI parser by Steven Levithan](http://blog.stevenlevithan.com/archives/parseuri), and the query string parsing is handled by a modified version of [node-querystring](https://github.com/visionmedia/node-querystring).
 
 **Note this used to have a jQuery dependency - this is now optional. See below for details**
 
@@ -89,6 +87,8 @@ purl('http://allmarkedup.com?sky=blue&grass=green').param(); // returns { 'sky':
 ```
 
 Note that the `.param()` method will work on both ampersand-split and semicolon-split querystrings.
+
+*As of version 2.2 the param method now handles array-style query string params.*
 
 URL segments
 -----------------------
