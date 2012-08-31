@@ -86,9 +86,8 @@
 
 	function parse(parts, parent, key, val) {
 		var part = parts.shift();
-		// end
 		if (!part) {
-			if (Array.isArray(parent[key])) {
+			if (isArray(parent[key])) {
 				parent[key].push(val);
 			} else if ('object' == typeof parent[key]) {
 				parent[key] = val;
@@ -97,25 +96,23 @@
 			} else {
 				parent[key] = [parent[key], val];
 			}
-			// array
 		} else {
 			var obj = parent[key] = parent[key] || [];
 			if (']' == part) {
-				if (Array.isArray(obj)) {
+				if (isArray(obj)) {
 					if ('' != val) obj.push(val);
 				} else if ('object' == typeof obj) {
-					obj[Object.keys(obj).length] = val;
+					obj[keys(obj).length] = val;
 				} else {
 					obj = parent[key] = [parent[key], val];
 				}
-				// prop
 			} else if (~part.indexOf(']')) {
 				part = part.substr(0, part.length - 1);
-				if (!isint.test(part) && Array.isArray(obj)) obj = promote(parent, key);
+				if (!isint.test(part) && isArray(obj)) obj = promote(parent, key);
 				parse(parts, obj, part, val);
 				// key
 			} else {
-				if (!isint.test(part) && Array.isArray(obj)) obj = promote(parent, key);
+				if (!isint.test(part) && isArray(obj)) obj = promote(parent, key);
 				parse(parts, obj, part, val);
 			}
 		}
@@ -127,9 +124,8 @@
 			len = parts.length,
 			last = len - 1;
 			parse(parts, parent, 'base', val);
-			// optimize
 		} else {
-			if (!isint.test(key) && Array.isArray(parent.base)) {
+			if (!isint.test(key) && isArray(parent.base)) {
 				var t = {};
 				for (var k in parent.base) t[k] = parent.base[k];
 				parent.base = t;
@@ -140,15 +136,12 @@
 	}
 
 	function parseString(str) {
-		return String(str)
-			.split(/&|;/)
-			.reduce(function(ret, pair) {
-			try{
+		return reduce(String(str).split(/&|;/), function(ret, pair) {
+			try {
 				pair = decodeURIComponent(pair.replace(/\+/g, ' '));
 			} catch(e) {
 				// ignore
 			}
-
 			var eql = pair.indexOf('='),
 				brace = lastBraceInKey(pair),
 				key = pair.substr(0, brace || eql),
@@ -160,18 +153,18 @@
 			return merge(ret, key, val);
 		}, { base: {} }).base;
 	}
-
+	
 	function set(obj, key, val) {
 		var v = obj[key];
 		if (undefined === v) {
 			obj[key] = val;
-		} else if (Array.isArray(v)) {
+		} else if (isArray(v)) {
 			v.push(val);
 		} else {
 			obj[key] = [v, val];
 		}
 	}
-
+	
 	function lastBraceInKey(str) {
 		var len = str.length,
 			 brace, c;
@@ -181,6 +174,29 @@
 			if ('[' == c) brace = true;
 			if ('=' == c && !brace) return i;
 		}
+	}
+	
+	function reduce(obj, accumulator){
+		var i = 0,
+			l = obj.length >> 0,
+			curr = arguments[2];
+		while (i < l) {
+			if (i in obj) curr = accumulator.call(undefined, curr, obj[i], i, obj);
+			++i;
+		}
+		return curr;
+	}
+	
+	function isArray(vArg) {
+		return Object.prototype.toString.call(vArg) === "[object Array]";
+	}
+	
+	function keys(obj) {
+		var keys = [];
+		for ( prop in obj ) {
+			if ( obj.hasOwnProperty(prop) ) keys.push(prop);
+		}
+		return keys;
 	}
 		
 	function purl( url, strictMode ) {
