@@ -241,11 +241,11 @@
 			
 			data : parseUri(url, strictMode),
 			// attempt function overloading
-			overload : function( attr, setter, getFunction, setFunction, data ) {
-				if ( typeof setter === 'undefined' ) {
+			overload : function( attr, value, getFunction, setFunction, data ) {
+				if ( typeof value === 'undefined' ) {
 					return getFunction(attr, data)
 				} else {
-					return setFunction(attr, setter, data)
+					return setFunction(attr, value, data)
 				}
 			},			
 
@@ -255,8 +255,8 @@
 				return typeof attr !== 'undefined' ? data.attr[attr] : data.attr;
 			},
 			// set various attributes from the URI
-			setAttr : function( attr, setter, data ) {
-				typeof attr !== 'undefined' ? (data.attr[attr] = setter) : (data.attr = setter);
+			setAttr : function( attr, value, data ) {
+				typeof attr !== 'undefined' ? (data.attr[attr] = value) : (data.attr = value);
                                 return constructUriFromAttr(attr, data);
 			},
 			// attempt function overloading
