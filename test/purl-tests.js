@@ -1,6 +1,9 @@
 buster.spec.expose();
 
-testSuite = function(url) {
+testSuite = function(wrapper, safe) {
+    safe = safe || false;
+    url = wrapper('http://allmarkedup.com/folder/dir/index.html?item=value#foo', safe)
+
     it('should have a protocol of http', function() {
         expect(url.attr('protocol')).toBe('http');
     });
@@ -14,7 +17,7 @@ testSuite = function(url) {
         expect(url.attr('port')).toBe('');
     });
 
-    it('should have an host of allmarkedup.com', function() {
+    it('should have a host of allmarkedup.com', function() {
         expect(url.attr('host')).toBe('allmarkedup.com');
     });
 
@@ -62,18 +65,38 @@ testSuite = function(url) {
     it('should have a segment(-1) of "folder"', function() {
         expect(url.segment(-1)).toBe("index.html");
     });
+
+    it('should have a source which is the url provided', function() {
+	expect(url.attr('source')).toBe('http://allmarkedup.com/folder/dir/index.html?item=value#foo');
+    });
+
+    it('should let you set the source and that will change everything', function() {
+	expect(url.attr('source', 'http://www.google.com').attr('host')).toBe('www.google.com');
+    })
+
+/*
+    it('should let you set the protocol to https', function() {
+	expect(url.attr('protocol', 'https').attr('protocol').toBe('https'));
+    });
+
+*/
+}
+
+testSuiteNoProtocol = function() {
+
 }
 
 describe("purl in non-strict mode", function () {
 
-    testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo'));
+    testSuite(purl, false);
 
 });
 
 
-describe("purl in strict mode", function () {
+/* describe("purl in strict mode", function () {
 
     testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo',
                    true));
 
 });
+*/

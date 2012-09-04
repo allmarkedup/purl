@@ -69,6 +69,36 @@
 		  
 		return uri;
 	};
+
+	function constructUriFromAttr( attr, data ) {
+		var result;
+		switch(attr)
+		{
+		case 'source':
+			result = data.attr.source;
+			break;	    
+		case 'relative':
+			result = expandRelativeUrl(data);
+			break;	
+		}
+		return purl(result);
+	}
+
+	function expandRelativeUrl( data ) {
+		normalizeProtocol(data.attr.protocol) + normalizeUserInfo(data.attr.userInfo) + data.attr.relative
+	}
+
+	function normalizeProtocol( protocol ) {
+		protocol.length == 0 ? "" : protocol + "://";
+	}
+
+	function normalizeUserInfo( userInfo ) {
+		userInfo.length == 0 ? "" : userInfo + "@";
+	}
+
+	function updateSource( data ) {
+			
+	}
 	
 	function getAttrName( elm ) {
 		var tn = elm.tagName;
@@ -210,12 +240,29 @@
 		return {
 			
 			data : parseUri(url, strictMode),
-			
+			// attempt function overloading
+			overload : function( attr, setter, getFunction, setFunction, data ) {
+				if ( typeof setter === 'undefined' ) {
+					return getFunction(attr, data)
+				} else {
+					return setFunction(attr, setter, data)
+				}
+			},			
+
 			// get various attributes from the URI
-			attr : function( attr ) {
+			getAttr : function( attr, data ) {
 				attr = aliases[attr] || attr;
-				return typeof attr !== 'undefined' ? this.data.attr[attr] : this.data.attr;
+				return typeof attr !== 'undefined' ? data.attr[attr] : data.attr;
 			},
+			// set various attributes from the URI
+			setAttr : function( attr, setter, data ) {
+				typeof attr !== 'undefined' ? (data.attr[attr] = setter) : (data.attr = setter);
+                                return constructUriFromAttr(attr, data);
+			},
+			// attempt function overloading
+			attr : function( attr, setter ) {
+				return this.overload(attr, setter, this.getAttr, this.setAttr, this.data);
+			},			
 			
 			// return query string parameters
 			param : function( param ) {
