@@ -8,6 +8,6 @@ config["Tests"] = {
     ],
 
     tests: [
-        "test/*-test.js"
+        "test/purl-tests.js"
     ]
 }
