@@ -159,3 +159,27 @@ Older versions and compatability
 ---------------------------------
 
 Please note that v2.x is **not** backwards compatible with v1.x of this plugin. v1.1 is still [available for download](https://github.com/allmarkedup/jQuery-URL-Parser/zipball/v1.1) should you need it for some reason.
+
+Testing
+-------
+
+@omarqureshi has kindly contributed some unit tests, which can be run using [http://busterjs.org](buster.js). The browser tests only currently cover the non-jQuery version.
+
+To run you'll need to have Buster installed (requires node and npm);
+
+```
+$ npm install -g buster
+```
+
+Once it's installed, just do:
+
+```
+$ cd /path/to/jQuery-URL-Parser
+$ buster static
+```
+
+Buster will then start up a server and give you a url (like http://localhost:8956) which you can navigate to with your browser of choice to see the test results.
+
+
+
+
