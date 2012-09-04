@@ -163,7 +163,7 @@ Please note that v2.x is **not** backwards compatible with v1.x of this plugin. 
 Testing
 -------
 
-@omarqureshi has kindly contributed some unit tests, which can be run using [http://busterjs.org](buster.js). The browser tests only currently cover the non-jQuery version.
+@omarqureshi has kindly contributed some unit tests, which can be run using [http://busterjs.org](buster.js). The tests only currently cover the non-jQuery version.
 
 To run you'll need to have Buster installed (requires node and npm);
 
@@ -178,7 +178,7 @@ $ cd /path/to/jQuery-URL-Parser
 $ buster static
 ```
 
-Buster will then start up a server and give you a url (like http://localhost:8956) which you can navigate to with your browser of choice to see the test results.
+Buster will then start up a server and give you a url (like `http://localhost:8956`) which you can navigate to with your browser of choice to see the test results.
 
 
 
