@@ -1,4 +1,6 @@
-function(url) {
+buster.spec.expose();
+
+testSuite = function(url) {
     it('should have a protocol of http', function() {
         expect(url.attr('protocol')).toBe('http');
     });
@@ -61,3 +63,17 @@ function(url) {
         expect(url.segment(-1)).toBe("index.html");
     });
 }
+
+describe("purl in non-strict mode", function () {
+
+    testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo'));
+
+});
+
+
+describe("purl in strict mode", function () {
+
+    testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo',
+                   true));
+
+});

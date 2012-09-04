@@ -6,6 +6,7 @@ config["Tests"] = {
     sources: [
         "purl.js"
     ],
+
     tests: [
         "test/*-test.js"
     ]
