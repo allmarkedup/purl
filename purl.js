@@ -74,30 +74,113 @@
 		var result;
 		switch(attr)
 		{
-		case 'source':
+		case 'source': 
 			result = data.attr.source;
 			break;	    
-		case 'relative':
-			result = expandRelativeUrl(data);
+		case 'relative': case 'protocol': case 'userInfo': case 'port': case 'host':
+			result = buildUrl(data);
 			break;	
+		case 'authority':
+                        data = reassignForAuthority(data);
+			result = buildUrl(data);
+			break;
+		case 'user':
+                        data = reassignForUserOrPassword(data);
+			result = buildUrl(data);
+			break;
+		case 'password':
+                        data = reassignForUserOrPassword(data);
+			result = buildUrl(data);
+			break;
+		case 'path':
+                        data = reassignPath(data);
+                        data = reassignRelative(data);
+			result = buildUrl(data);
+			break;
+		case 'directory':
+                        data = reassignRelative(data);
+			result = buildUrl(data);
+			break;
+		case 'file':
+                        data = reassignRelative(data);
+			result = buildUrl(data);
+			break;
+		case 'query':
+                        data = reassignRelative(data);
+			result = buildUrl(data);
+			break;
+		case 'fragment':
+                        data = reassignRelative(data);
+			result = buildUrl(data);
+			break;
 		}
 		return purl(result);
 	}
 
-	function expandRelativeUrl( data ) {
-		normalizeProtocol(data.attr.protocol) + normalizeUserInfo(data.attr.userInfo) + data.attr.relative
+	function reassignPath( data ) {
+		path = data.attr.path;
+		path = path.split("/");
+		last = path.slice(-1)[0]
+		if (last.indexOf('.') != -1) {
+			data.attr.file = last;
+			path.pop();
+		} else {
+			data.attr.file = '';
+		}
+		path = path.join("/");
+		data.attr.directory = path;
+		return data;
+	}
+
+	function reassignRelative( data ) {
+		path = data.attr.directory + data.attr.file 
+		if (data.attr.query.length != 0) {
+			path = path + "?" + data.attr.query;
+		}
+		if (data.attr.fragment.length != 0) {
+			path = path + "#" + data.attr.fragment;
+		}
+		data.attr.relative = path;
+		return data;
+	}
+
+
+	function reassignForAuthority( data ) {
+		authority = data.attr.authority
+		authority = authority.split("@")
+		if (authority.length >= 2) {
+			data.attr.userInfo = authority.shift();
+		}
+		data.attr.host = authority.join("@")
+		return data;
+	}
+
+	function reassignForUserOrPassword( data ) {
+		if (data.attr.user.length > 0 || data.attr.password.length > 0) {
+			data.attr.userInfo = data.attr.user + ":" + data.attr.password;
+		}
+		return data;
+	}
+
+
+	function buildUrl( data ) {
+		return normalizeProtocol(data.attr.protocol) + 
+			normalizeUserInfo(data.attr.userInfo) + 
+			data.attr.host + 
+			normalizePort(data.attr.port) +  
+			data.attr.relative;
+	}
+
+	function normalizePort( port ) {
+		return port.length == 0 ? "" : ":" + port;
 	}
 
 	function normalizeProtocol( protocol ) {
-		protocol.length == 0 ? "" : protocol + "://";
+		return protocol.length == 0 ? "" : protocol + "://";
 	}
 
 	function normalizeUserInfo( userInfo ) {
-		userInfo.length == 0 ? "" : userInfo + "@";
-	}
-
-	function updateSource( data ) {
-			
+		return userInfo.length == 0 ? "" : userInfo + "@";
 	}
 	
 	function getAttrName( elm ) {
