@@ -84,11 +84,7 @@
                         data = reassignForAuthority(data);
 			result = buildUrl(data);
 			break;
-		case 'user':
-                        data = reassignForUserOrPassword(data);
-			result = buildUrl(data);
-			break;
-		case 'password':
+		case 'user': case 'password':
                         data = reassignForUserOrPassword(data);
 			result = buildUrl(data);
 			break;
@@ -97,19 +93,7 @@
                         data = reassignRelative(data);
 			result = buildUrl(data);
 			break;
-		case 'directory':
-                        data = reassignRelative(data);
-			result = buildUrl(data);
-			break;
-		case 'file':
-                        data = reassignRelative(data);
-			result = buildUrl(data);
-			break;
-		case 'query':
-                        data = reassignRelative(data);
-			result = buildUrl(data);
-			break;
-		case 'fragment':
+		case 'directory': case 'file': case 'query': case 'fragment':
                         data = reassignRelative(data);
 			result = buildUrl(data);
 			break;
