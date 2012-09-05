@@ -69,6 +69,103 @@
 		  
 		return uri;
 	};
+
+	function constructUriFromAttr( attr, data ) {
+		var result;
+		switch(attr)
+		{
+		case 'source': 
+			result = data.attr.source;
+			break;	    
+		case 'relative': case 'protocol': case 'userInfo': case 'port': case 'host':
+			result = buildUrl(data);
+			break;	
+		case 'authority':
+                        data = reassignForAuthority(data);
+			result = buildUrl(data);
+			break;
+		case 'user': case 'password':
+                        data = reassignForUserOrPassword(data);
+			result = buildUrl(data);
+			break;
+		case 'path':
+                        data = reassignPath(data);
+                        data = reassignRelative(data);
+			result = buildUrl(data);
+			break;
+		case 'directory': case 'file': case 'query': case 'fragment':
+                        data = reassignRelative(data);
+			result = buildUrl(data);
+			break;
+		}
+		return purl(result);
+	}
+
+	function reassignPath( data ) {
+		path = data.attr.path;
+		path = path.split("/");
+		last = path.slice(-1)[0]
+		if (last.indexOf('.') != -1) {
+			data.attr.file = last;
+			path.pop();
+		} else {
+			data.attr.file = '';
+		}
+		path = path.join("/");
+		data.attr.directory = path;
+		return data;
+	}
+
+	function reassignRelative( data ) {
+		path = data.attr.directory + data.attr.file 
+		if (data.attr.query.length != 0) {
+			path = path + "?" + data.attr.query;
+		}
+		if (data.attr.fragment.length != 0) {
+			path = path + "#" + data.attr.fragment;
+		}
+		data.attr.relative = path;
+		return data;
+	}
+
+
+	function reassignForAuthority( data ) {
+		authority = data.attr.authority
+		authority = authority.split("@")
+		if (authority.length >= 2) {
+			data.attr.userInfo = authority.shift();
+		}
+		data.attr.host = authority.join("@")
+		return data;
+	}
+
+	function reassignForUserOrPassword( data ) {
+		if (data.attr.user.length > 0 || data.attr.password.length > 0) {
+			data.attr.userInfo = data.attr.user + ":" + data.attr.password;
+		}
+		return data;
+	}
+
+
+	function buildUrl( data ) {
+		return normalizeProtocol(data.attr.protocol) + 
+			normalizeUserInfo(data.attr.userInfo) + 
+			data.attr.host + 
+			normalizePort(data.attr.port) +  
+			data.attr.relative;
+	}
+
+	function normalizePort( port ) {
+		return port.length == 0 ? "" : ":" + port;
+	}
+
+	function normalizeProtocol( protocol ) {
+		return protocol.length == 0 ? "" : protocol + "://";
+	}
+
+	function normalizeUserInfo( userInfo ) {
+		return userInfo.length == 0 ? "" : userInfo + "@";
+	}
 	
 	function getAttrName( elm ) {
 		var tn = elm.tagName;
@@ -210,12 +307,29 @@
 		return {
 			
 			data : parseUri(url, strictMode),
-			
+			// attempt function overloading
+			overload : function( attr, value, getFunction, setFunction, data ) {
+				if ( typeof value === 'undefined' ) {
+					return getFunction(attr, data)
+				} else {
+					return setFunction(attr, value, data)
+				}
+			},			
+
 			// get various attributes from the URI
-			attr : function( attr ) {
+			getAttr : function( attr, data ) {
 				attr = aliases[attr] || attr;
-				return typeof attr !== 'undefined' ? this.data.attr[attr] : this.data.attr;
+				return typeof attr !== 'undefined' ? data.attr[attr] : data.attr;
 			},
+			// set various attributes from the URI
+			setAttr : function( attr, value, data ) {
+				typeof attr !== 'undefined' ? (data.attr[attr] = value) : (data.attr = value);
+                                return constructUriFromAttr(attr, data);
+			},
+			// attempt function overloading
+			attr : function( attr, setter ) {
+				return this.overload(attr, setter, this.getAttr, this.setAttr, this.data);
+			},			
 			
 			// return query string parameters
 			param : function( param ) {
