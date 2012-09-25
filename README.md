@@ -1,5 +1,5 @@
 (jQuery) URL Parser v2.2
-======================
+========================
 
 An AMD compatible utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more.
 
@@ -10,7 +10,7 @@ The core parser functionality is based on the [Regex URI parser by Steven Levith
 **License:** Available for use under a MIT-style license. If you need a different license for any reason please just let me know.
 
 To jQuery or *not* to jQuery, that is the question...
-----------------------------------------------------
+-----------------------------------------------------
 
 This utility can be used in two ways - with jQuery or without. There is just one file (purl.js) for both versions - if jQuery is included on the page before it then it will provide the 'jQuery-style' interface (see examples below), otherwise it will be accessible via the global `purl` variable.
 
@@ -91,7 +91,7 @@ Note that the `.param()` method will work on both ampersand-split and semicolon-
 *As of version 2.2 the param method now handles array-style query string params.*
 
 URL segments
------------------------
+------------
 
 The `.segment()` method is used to return values of individual segments from the URL's path.
 
@@ -113,7 +113,7 @@ purl('http://allmarkedup.com/folder/dir/example/index.html').segment(); // plain
 ```
 
 Fragment parameters and/or segments
--------------------------------
+-----------------------------------
 
 Some sites and apps also use the hash fragment to store querystring-style key value pairs (eg. `http://test.com/#sky=blue&grass=green`), or slash-delimited paths (eg. `http://test.com/#/about/us/`).
 
@@ -130,7 +130,7 @@ purl('http://test.com/#/about/us/').fsegment(1); // returns 'about'
 ```
 
 Strict mode and relative URLs
---------------------
+-----------------------------
 
 Internally this plugin uses Steven Levithan's excellent Regex URI parser, which has two modes - loose and strict. This plugin uses the loose mode by default (i.e. strict mode set to `false`), which deviates slightly from the specs but can produce more intuitive results in some situations. However, loose mode will not correctly parse relative URLs, so you can optionally enable strict mode when calling the plugin as follows:
 
@@ -155,8 +155,51 @@ If there is a chance you may end up parsing a badly encoded URL you should proba
 
 Thanks to [steve78b](https://github.com/steve78b) for pointing this out.
 
+Generate URL
+------------
+
+With *toString* method you can generate the url from url object.
+You can use param method to modify parameters values.
+
+Example :
+
+``` javascript
+/*---- jQuery version -----*/
+var url = $.url('http://www.example.com?item1=12');
+url.param('item2', 42);
+url.toString(); // return "http://www.example.com?item1=12&item2=42"
+
+
+url.param('item1', 20);
+url.removeParam('item2');
+url.toString(); // return "http://www.example.com?item1=20"
+
+url.param({
+    'item5': 13,
+    'item6': "foobar"
+});
+url.toString(); // return "http://www.example.com?item5=13&item6=foobar"
+
+/*---- plain JS version -----*/
+var url = purl('http://www.example.com?item1=12');
+url.param('item2', 42);
+url.toString(); // return "http://www.example.com?item1=12&item2=42"
+
+
+url.param('item1', 20);
+url.removeParam('item2');
+url.toString(); // return "http://www.example.com?item1=20"
+
+url.param({
+    'item5': 13,
+    'item6': "foobar"
+});
+url.toString(); // return "http://www.example.com?item5=13&item6=foobar"
+```
+
+
 Older versions and compatability
----------------------------------
+--------------------------------
 
 Please note that v2.x is **not** backwards compatible with v1.x of this plugin. v1.1 is still [available for download](https://github.com/allmarkedup/jQuery-URL-Parser/zipball/v1.1) should you need it for some reason.
 
@@ -179,7 +222,3 @@ $ buster static
 ```
 
 Buster will then start up a server and give you a url (like `http://localhost:8956`) which you can navigate to with your browser of choice to see the test results.
-
-
-
-
