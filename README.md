@@ -45,17 +45,49 @@ url.attr('path'); // returns '/folder/dir/index.html'
 ```
 
 The attributes available for querying are:
+<table>
+  <tr><td>source</td><td>The whole url being parsed</td></tr>
+	<tr><td>protocol</td><td>eg. http, https, file, etc</td></tr>
+	<tr><td>host</td><td>eg. www.mydomain.com, localhost etc</td></tr>
+	<tr><td>port</td><td>eg. 80</td></tr>
+	<tr><td>relative</td><td>The relative path to the file including the querystring (eg. /folder/dir/index.html?item=value)</td></tr>
+	<tr><td>path</td><td>The path to the file (eg. /folder/dir/index.html)</td></tr>
+	<tr><td>directory</td><td>The directory part of the path (eg. /folder/dir/)</td></tr>
+	<tr><td>file</td><td>The basename of the file eg. index.html</td></tr>
+	<tr><td>query</td><td>The entire query string if it exists, eg. item=value&item2=value2</td></tr>
+	<tr><td>fragment or anchor</td><td>The entire string after the # symbol </td></tr>
+</table>
 
-* **source** - the whole url being parsed
-* **protocol** - eg. http, https, file, etc
-* **host** - eg. www.mydomain.com, localhost etc
-* **port** - eg. 80
-* **relative** - the relative path to the file including the querystring (eg. /folder/dir/index.html?item=value)
-* **path** - the path to the file (eg. /folder/dir/index.html)
-* **directory** - the directory part of the path (eg. /folder/dir/)
-* **file** - the basename of the file eg. index.html
-* **query** - the entire querystring if it exists, eg. item=value&item2=value2
-* **fragment** (also available as **anchor**) - the entire string after the # symbol 
+``` javascript
+> url = $.url("http://markdown.com/awesome/language/markdown.html?show=all#top");
+> url.attr('source');
+"http://markdown.com/awesome/language/markdown.html?show=all#top"
+
+> url.attr('protocol');
+"http"
+
+> url.attr('host');
+"markdown.com"
+
+> url.attr('relative');
+"/awesome/language/markdown.html?show=all#top"
+
+> url.attr('path');
+"/awesome/language/markdown.html"
+
+> url.attr('directory');
+"/awesome/language/"
+
+> url.attr('file');
+"markdown.html"
+
+> url.attr('query');
+"show=all"
+
+> url.attr('fragment');
+"top"
+```
+
 
 There are also a few more obscure ones available too if you want to dig about a bit ;-)
 
