@@ -219,7 +219,27 @@
 			
 			// return query string parameters
 			param : function( param ) {
-				return typeof param !== 'undefined' ? this.data.param.query[param] : this.data.param.query;
+				var params = {};
+				if (typeof param !== 'undefined')
+				{
+					if (param instanceof Array)
+					{
+						for (var i = 0; i < param.length; i++)
+						{
+							var name = param[i];
+							params[name] = this.data.param.query[name];
+						}
+					}
+					else
+					{
+						params = this.data.param.query[param];
+					}
+				}
+				else
+				{
+					params = this.data.param.query;
+				}
+				return params;
 			},
 			
 			// return fragment parameters
