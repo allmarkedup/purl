@@ -1,5 +1,5 @@
 /*
- * JQuery URL Parser plugin, v2.2.1
+ * JQuery URL Parser plugin, v2.2.1.2
  * Developed and maintanined by Mark Perkins, mark@allmarkedup.com
  * Source repository: https://github.com/allmarkedup/jQuery-URL-Parser
  * Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
@@ -219,7 +219,27 @@
 			
 			// return query string parameters
 			param : function( param ) {
-				return typeof param !== 'undefined' ? this.data.param.query[param] : this.data.param.query;
+				var params = {};
+				if (typeof param !== 'undefined')
+				{
+					if (param instanceof Array)
+					{
+						for (var i = 0; i < param.length; i++)
+						{
+							var name = param[i];
+							params[name] = this.data.param.query[name];
+						}
+					}
+					else
+					{
+						params = this.data.param.query[param];
+					}
+				}
+				else
+				{
+					params = this.data.param.query;
+				}
+				return params;
 			},
 			
 			// return fragment parameters
