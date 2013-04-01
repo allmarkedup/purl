@@ -64,9 +64,17 @@ testSuite = function(url) {
     });
 };
 
+testEmptyQueryParams = function(url) {
+    it('should have empty param()', function() {
+        expect(Object.keys( url.param() ).length === 0).toBeTrue();
+    });
+};
+
 describe("purl in non-strict mode", function () {
 
     testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo'));
+    testEmptyQueryParams(purl('http://allmarkedup.com/folder/dir/index.html#foo'));
+    testEmptyQueryParams(purl('http://allmarkedup.com/folder/dir/index.html?#foo'));
 
 });
 
@@ -74,5 +82,7 @@ describe("purl in non-strict mode", function () {
 describe("purl in strict mode", function () {
 
     testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo', true));
+    testEmptyQueryParams(purl('http://allmarkedup.com/folder/dir/index.html#foo', true));
+    testEmptyQueryParams(purl('http://allmarkedup.com/folder/dir/index.html?#foo', true));
 
 });
