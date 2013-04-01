@@ -68,7 +68,7 @@
 		uri.attr['base'] = uri.attr.host ? (uri.attr.protocol ?  uri.attr.protocol+'://'+uri.attr.host : uri.attr.host) + (uri.attr.port ? ':'+uri.attr.port : '') : '';      
 		  
 		return uri;
-	};
+	}
 	
 	function getAttrName( elm ) {
 		var tn = elm.tagName;
@@ -77,7 +77,7 @@
 	}
 	
 	function promote(parent, key) {
-		if (parent[key].length == 0) return parent[key] = {};
+		if (parent[key].length === 0) return parent[key] = {};
 		var t = {};
 		for (var i in parent[key]) t[i] = parent[key][i];
 		parent[key] = t;
@@ -100,7 +100,7 @@
 			var obj = parent[key] = parent[key] || [];
 			if (']' == part) {
 				if (isArray(obj)) {
-					if ('' != val) obj.push(val);
+					if ('' !== val) obj.push(val);
 				} else if ('object' == typeof obj) {
 					obj[keys(obj).length] = val;
 				} else {
@@ -145,10 +145,14 @@
 			var eql = pair.indexOf('='),
 				brace = lastBraceInKey(pair),
 				key = pair.substr(0, brace || eql),
-				val = pair.substr(brace || eql, pair.length),
+				val = pair.substr(brace || eql, pair.length);
+
 				val = val.substr(val.indexOf('=') + 1, val.length);
 
-			if ('' == key) key = pair, val = '';
+			if (key === '') {
+				key = pair;
+				val = '';
+			}
 
 			return merge(ret, key, val);
 		}, { base: {} }).base;
@@ -167,7 +171,8 @@
 	
 	function lastBraceInKey(str) {
 		var len = str.length,
-			 brace, c;
+			brace,
+			c;
 		for (var i = 0; i < len; ++i) {
 			c = str[i];
 			if (']' == c) brace = false;
@@ -192,11 +197,11 @@
 	}
 	
 	function keys(obj) {
-		var keys = [];
-		for ( prop in obj ) {
-			if ( obj.hasOwnProperty(prop) ) keys.push(prop);
+		var key_array = [];
+		for ( var prop in obj ) {
+			if ( obj.hasOwnProperty(prop) ) key_array.push(prop);
 		}
-		return keys;
+		return key_array;
 	}
 		
 	function purl( url, strictMode ) {
@@ -249,7 +254,7 @@
 	    	
 		};
 	
-	};
+	}
 	
 	if ( typeof $ !== 'undefined' ) {
 		
@@ -268,4 +273,3 @@
 	}
 
 });
-

@@ -44,15 +44,15 @@ testSuite = function(url) {
     });
 
     it('should have a param() of item: "value"', function() {
-        expect(url.param()).toBeObject({item: 'value'}) 
+        expect(url.param()).toBeObject({item: 'value'});
     });
 
     it('should have a param("item") of "value"', function() {
-        expect(url.param('item')).toBe('value') 
+        expect(url.param('item')).toBe('value');
     });
 
     it('should have a segment() of ["folder","dir","index.html"]', function() {
-        expect(url.segment()).toEqual(["folder","dir","index.html"]) 
+        expect(url.segment()).toEqual(["folder","dir","index.html"]);
     });
 
     it('should have a segment(1) of "folder"', function() {
@@ -62,7 +62,7 @@ testSuite = function(url) {
     it('should have a segment(-1) of "folder"', function() {
         expect(url.segment(-1)).toBe("index.html");
     });
-}
+};
 
 describe("purl in non-strict mode", function () {
 
@@ -73,7 +73,6 @@ describe("purl in non-strict mode", function () {
 
 describe("purl in strict mode", function () {
 
-    testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo',
-                   true));
+    testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo', true));
 
 });
