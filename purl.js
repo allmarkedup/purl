@@ -8,22 +8,15 @@
 ;(function(factory) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD available; use anonymous module
-		if ( typeof jQuery !== 'undefined' ) {
-			define(['jquery'], factory);	
-		} else {
-			define([], factory);
-		}
+		define(function () { return factory(); });
 	} else {
 		// No AMD available; mutate global vars
-		if ( typeof jQuery !== 'undefined' ) {
-			factory(jQuery);
-		} else {
-			factory();
-		}
+		factory();
 	}
-})(function($, undefined) {
-	
-	var tag2attr = {
+})(function(undefined) {
+	var
+		$ = window.jQuery,
+		tag2attr = {
 			a       : 'href',
 			img     : 'src',
 			form    : 'action',
