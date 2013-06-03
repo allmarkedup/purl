@@ -274,4 +274,6 @@
 		window.purl = purl;
 	}
 
+	return purl;
+
 });
