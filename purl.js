@@ -32,8 +32,6 @@
             loose :  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/ // more intuitive, fails on relative paths and deviates from specs
         },
 
-        toString = Object.prototype.toString,
-
         isint = /^[0-9]+$/;
 
     function parseUri( url, strictMode ) {
@@ -110,9 +108,7 @@
 
     function merge(parent, key, val) {
         if (~key.indexOf(']')) {
-            var parts = key.split('['),
-            len = parts.length,
-            last = len - 1;
+            var parts = key.split('[');
             parse(parts, parent, 'base', val);
         } else {
             if (!isint.test(key) && isArray(parent.base)) {
