@@ -1,4 +1,4 @@
-Purl (A JavaScript URL parser) v2.3
+Purl (A JavaScript URL parser) v2.3.1
 ===================================
 
 An AMD compatible utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more.
