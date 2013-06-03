@@ -6,22 +6,12 @@
  */
 
 ;(function(factory) {
-	if (typeof define === 'function' && define.amd) {
-		// AMD available; use anonymous module
-		if ( typeof jQuery !== 'undefined' ) {
-			define(['jquery'], factory);
-		} else {
-			define([], factory);
-		}
-	} else {
-		// No AMD available; mutate global vars
-		if ( typeof jQuery !== 'undefined' ) {
-			factory(jQuery);
-		} else {
-			factory();
-		}
-	}
-})(function($, undefined) {
+    if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else {
+        window.purl = factory();
+    }
+})(function() {
 
 	var tag2attr = {
 			a       : 'href',
@@ -162,7 +152,7 @@
 
 	function set(obj, key, val) {
 		var v = obj[key];
-		if (undefined === v) {
+		if (typeof v === 'undefined') {
 			obj[key] = val;
 		} else if (isArray(v)) {
 			v.push(val);
@@ -257,21 +247,23 @@
 		};
 
 	}
+	
+	purl.jQuery = function($){
+		if ($ != null) {
+			$.fn.url = function( strictMode ) {
+				var url = '';
+				if ( this.length ) {
+					url = $(this).attr( getAttrName(this[0]) ) || '';
+				}
+				return purl( url, strictMode );
+			};
 
-	if ( typeof $ !== 'undefined' ) {
+			$.url = purl;
+		}
+	};
 
-		$.fn.url = function( strictMode ) {
-			var url = '';
-			if ( this.length ) {
-				url = $(this).attr( getAttrName(this[0]) ) || '';
-			}
-			return purl( url, strictMode );
-		};
+	purl.jQuery(window.jQuery);
 
-		$.url = purl;
-
-	} else {
-		window.purl = purl;
-	}
+	return purl;
 
 });
