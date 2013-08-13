@@ -20,7 +20,9 @@
             base    : 'href',
             script  : 'src',
             iframe  : 'src',
-            link    : 'href'
+            link    : 'href',
+            embed   : 'src',
+            object  : 'data'
         },
 
         key = ['source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'fragment'], // keys available to query
