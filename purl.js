@@ -35,15 +35,15 @@
         },
 
         isint = /^[0-9]+$/,
-		AuthPath = {
-			strict : /^[0-9a-zA-Z]*:?\/\/[^@\/]+\/.*@.*/, // only allow "//domain.com/xxx@yyy" "http://domain.com/xxx@yyy" 
-			loose : /^([0-9a-zA-Z]*:?\/\/[^@\/]+)?\/.*@.*/ // also allow "/xxx@yyy", note : relative path "xxx@yyy" is a valid "user@host" so not support
+        AuthPath = {
+            strict : /^[0-9a-zA-Z]*:?\/\/[^@\/]+\/.*@.*/, // only allow "//domain.com/xxx@yyy" "http://domain.com/xxx@yyy" 
+            loose : /^([0-9a-zA-Z]*:?\/\/[^@\/]+)?\/.*@.*/ // also allow "/xxx@yyy", note : relative path "xxx@yyy" is a valid "user@host" so not support
         };
 
-	function patchAuthority( str, strictMode ){
-		return AuthPath[ strictMode || false ? 'strict' : 'loose' ].test(str)? str.replace(/^([0-9a-zA-Z]*:?\/\/)/,'$1:@') : str;
-	}
-	
+    function patchAuthority( str, strictMode ){
+        return AuthPath[ strictMode || false ? 'strict' : 'loose' ].test(str)? str.replace(/^([0-9a-zA-Z]*:?\/\/)/,'$1:@') : str;
+    }
+    
     function parseUri( url, strictMode ) {
         var str = patchAuthority(decodeURI( url ), strictMode),
         res   = parser[ strictMode || false ? 'strict' : 'loose' ].exec( str ),
