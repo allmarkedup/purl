@@ -36,18 +36,18 @@
 
         isint = /^[0-9]+$/;
 
-    function parseUri( url, strictMode ) {
+    function parseUri( url, strictMode, parseArrays ) {
         var str = decodeURI( url ),
-        res   = parser[ strictMode || false ? 'strict' : 'loose' ].exec( str ),
-        uri = { attr : {}, param : {}, seg : {} },
-        i   = 14;
+            res   = parser[ strictMode || false ? 'strict' : 'loose' ].exec( str ),
+            uri = { attr : {}, param : {}, seg : {} },
+            i   = 14;
 
         while ( i-- ) {
             uri.attr[ key[i] ] = res[i] || '';
         }
 
         // build query and fragment parameters
-        uri.param['query'] = parseString(uri.attr['query']);
+        uri.param['query'] = parseString(uri.attr['query'], parseArrays);
         uri.param['fragment'] = parseString(uri.attr['fragment']);
 
         // split path and fragement into segments
@@ -108,8 +108,8 @@
         }
     }
 
-    function merge(parent, key, val) {
-        if (~key.indexOf(']')) {
+    function merge(parent, key, val, parseArrays) {
+        if (~key.indexOf(']') && parseArrays) {
             var parts = key.split('[');
             parse(parts, parent, 'base', val);
         } else {
@@ -125,7 +125,7 @@
         return parent;
     }
 
-    function parseString(str) {
+    function parseString(str, parseArrays) {
         return reduce(String(str).split(/&|;/), function(ret, pair) {
             try {
                 pair = decodeURIComponent(pair.replace(/\+/g, ' '));
@@ -144,7 +144,7 @@
                 val = '';
             }
 
-            return merge(ret, key, val);
+            return merge(ret, key, val, parseArrays);
         }, { base: {} }).base;
     }
 
@@ -194,17 +194,24 @@
         return key_array;
     }
 
-    function purl( url, strictMode ) {
+    function purl( url, strictMode, parseArrays ) {
         if ( arguments.length === 1 && url === true ) {
             strictMode = true;
             url = undefined;
+        } else if (arguments.length === 2 && (typeof(url) !== 'string')) {
+            strictMode = url;
+            parseArrays = strictMode;
+            url = undefined;
         }
         strictMode = strictMode || false;
+
+        parseArrays = parseArrays == undefined ? true : parseArrays;
+
         url = url || window.location.toString();
 
         return {
 
-            data : parseUri(url, strictMode),
+            data : parseUri(url, strictMode, parseArrays),
 
             // get various attributes from the URI
             attr : function( attr ) {
@@ -245,15 +252,15 @@
         };
 
     }
-    
+
     purl.jQuery = function($){
         if ($ != null) {
-            $.fn.url = function( strictMode ) {
+            $.fn.url = function( strictMode , parseArrays ) {
                 var url = '';
                 if ( this.length ) {
                     url = $(this).attr( getAttrName(this[0]) ) || '';
                 }
-                return purl( url, strictMode );
+                return purl( url, strictMode, parseArrays );
             };
 
             $.url = purl;
