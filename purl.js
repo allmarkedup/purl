@@ -1,6 +1,6 @@
 /*
  * Purl (A JavaScript URL parser) v2.3.1
- * Developed and maintanined by Mark Perkins, mark@allmarkedup.com
+ * Developed and maintained by Mark Perkins, mark@allmarkedup.com
  * Source repository: https://github.com/allmarkedup/jQuery-URL-Parser
  * Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
  */
@@ -27,7 +27,7 @@
 
         key = ['source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'fragment'], // keys available to query
 
-        aliases = { 'anchor' : 'fragment' }, // aliases for backwards compatability
+        aliases = { 'anchor' : 'fragment' }, // aliases for backwards compatibility
 
         parser = {
             strict : /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,  //less intuitive, more accurate to the specs
@@ -50,7 +50,7 @@
         uri.param['query'] = parseString(uri.attr['query']);
         uri.param['fragment'] = parseString(uri.attr['fragment']);
 
-        // split path and fragement into segments
+        // split path and fragment into segments
         uri.seg['path'] = uri.attr.path.replace(/^\/+|\/+$/g,'').split('/');
         uri.seg['fragment'] = uri.attr.fragment.replace(/^\/+|\/+$/g,'').split('/');
 
