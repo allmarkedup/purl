@@ -1,5 +1,7 @@
 buster.spec.expose();
 
+var expect = buster.expect;
+
 testSuite = function(url) {
     it('should have a protocol of http', function() {
         expect(url.attr('protocol')).toBe('http');
@@ -70,19 +72,23 @@ testEmptyQueryParams = function(url) {
     });
 };
 
-describe("purl in non-strict mode", function () {
+testAtSymbolQueryParms = function(url) {
+    it('should have a querystring of item=value&email=name@example.com', function() {
+        expect(url.attr('query')).toBe('item=value&email=name@example.com');
+    });
+}
 
+describe("purl in non-strict mode", function () {
     testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo'));
     testEmptyQueryParams(purl('http://allmarkedup.com/folder/dir/index.html#foo'));
     testEmptyQueryParams(purl('http://allmarkedup.com/folder/dir/index.html?#foo'));
-
+    testAtSymbolQueryParms(purl('http://allmarkedup.com/folder/dir/index.html?item=value&email=name@example.com#foo'))
 });
 
 
 describe("purl in strict mode", function () {
-
     testSuite(purl('http://allmarkedup.com/folder/dir/index.html?item=value#foo', true));
     testEmptyQueryParams(purl('http://allmarkedup.com/folder/dir/index.html#foo', true));
     testEmptyQueryParams(purl('http://allmarkedup.com/folder/dir/index.html?#foo', true));
-
+    testAtSymbolQueryParms(purl('http://allmarkedup.com/folder/dir/index.html?item=value&email=name@example.com#foo'))
 });
