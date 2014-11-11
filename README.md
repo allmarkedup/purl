@@ -1,6 +1,8 @@
 Purl (A JavaScript URL parser) v2.3.1
 ===================================
 
+> **PLEASE NOTE: THIS PACKAGE IS NO LONGER MAINTAINED**. There are plenty of great alternatives such as [URI.js](https://github.com/medialize/URI.js) which I suggest you check out instead.
+
 An AMD compatible utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more.
 
 The core parser functionality is based on the [Regex URI parser by Steven Levithan](http://blog.stevenlevithan.com/archives/parseuri), and the query string parsing is handled by a modified version of [node-querystring](https://github.com/visionmedia/node-querystring).
