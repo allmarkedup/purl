@@ -26,12 +26,12 @@ There are a few different ways to choose what URL to parse:
 ``` javascript
 /*---- jQuery version -----*/
 var url = $.url(); // parse the current page URL
-var url = $.url('http://allmarkedup.com'); // pass in a URI as a string and parse that 
+var url = $.url('http://allmarkedup.com'); // pass in a URI as a string and parse that
 var url = $('#myElement').url(); // extract the URL from the selected element and parse that - will work on any element with a `src`, `href` or `action` attribute.
 
 /*---- plain JS version -----*/
 var url = purl(); // parse the current page URL
-var url = purl('http://allmarkedup.com'); // pass in a URI as a string and parse that 
+var url = purl('http://allmarkedup.com'); // pass in a URI as a string and parse that
 ```
 
 URL attributes
@@ -124,6 +124,7 @@ Note that the `.param()` method will work on both ampersand-split and semicolon-
 
 *As of version 2.2 the param method now handles array-style query string params.*
 
+
 URL segments
 -----------------------
 
@@ -177,6 +178,23 @@ var url = $('#myElement').url(true); // extract the URL from the selected elemen
 /*---- plain JS version -----*/
 var url = purl(true); // parse the current page URL in strict mode
 var url = purl('http://allmarkedup.com',true); // pass in a URI as a string and parse that in strict mode
+```
+
+Array parameters parsing
+--------------------
+As of version 2.2 the param method now handles array-style query string params.
+If the arrays have non-sequential numeric keys it will not work well with jQuery.param() function.
+If you do not need the array parsing functionality can be disabled with the third param.
+
+``` javascript
+/*---- jQuery version -----*/
+var url = $.url(false, false); // parse the current page URL in normal mode with array parsing disabled
+var url = $.url('http://allmarkedup.com', false, false); // pass in a URI as a string and parse that in normal mode with array parsing disabled
+var url = $('#myElement').url(false, false); // extract the URL from the selected element and parse that in normal mode with array parsing disabled
+
+/*---- plain JS version -----*/
+var url = purl(false, false); // parse the current page URL in normal mode with array parsing disabled
+var url = purl('http://allmarkedup.com', false, false); // pass in a URI as a string and parse that in normal mode with array parsing disabled
 ```
 
 
