@@ -9,7 +9,7 @@
     if (typeof define === 'function' && define.amd) {
         define(factory);
     } else {
-        window.purl = factory();
+        this.purl = factory();
     }
 })(function() {
 
@@ -260,7 +260,9 @@
         }
     };
 
-    purl.jQuery(window.jQuery);
+    if ( typeof window !== 'undefined' ) {
+        purl.jQuery(window.jQuery);    
+    }
 
     return purl;
 
