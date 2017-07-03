@@ -151,7 +151,7 @@ Fragment parameters and/or segments
 
 Some sites and apps also use the hash fragment to store querystring-style key value pairs (eg. `http://test.com/#sky=blue&grass=green`), or slash-delimited paths (eg. `http://test.com/#/about/us/`).
 
-There are two methods available for extracting information from fragments of these types - `.fparam()` and `.fsegment()`, both of which behave indentically to their `.param()` and `.segment()` counterparts but act on the fragment rather than the main URL.
+There are two methods available for extracting information from fragments of these types - `.fparam()` and `.fsegment()`, both of which behave identically to their `.param()` and `.segment()` counterparts but act on the fragment rather than the main URL.
 
 ``` javascript
 /*---- jQuery version -----*/
