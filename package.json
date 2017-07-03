@@ -1,6 +1,6 @@
 {
-  "name": "purl",
+  "name": "@allmarkedup/purl",
   "version": "2.3.1",
-  "description": "Purl (A JavaScript URL parser)",
+  "description": "A JavaScript URL parser",
   "author": "Mark Perkins"
 }
