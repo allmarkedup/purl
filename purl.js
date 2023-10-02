@@ -67,8 +67,8 @@
     }
 
     function promote(parent, key) {
-        if (parent[key].length === 0) return parent[key] = {};
-        var t = {};
+        if (parent[key].length === 0) return parent[key] = Object.create(null);
+        var t = Object.create(null);
         for (var i in parent[key]) t[i] = parent[key][i];
         parent[key] = t;
         return t;
@@ -114,7 +114,7 @@
             parse(parts, parent, 'base', val);
         } else {
             if (!isint.test(key) && isArray(parent.base)) {
-                var t = {};
+                var t = Object.create(null);
                 for (var k in parent.base) t[k] = parent.base[k];
                 parent.base = t;
             }
@@ -145,7 +145,7 @@
             }
 
             return merge(ret, key, val);
-        }, { base: {} }).base;
+        }, { base: Object.create(null) }).base;
     }
 
     function set(obj, key, val) {
